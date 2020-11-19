@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Spokestack Actions</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="search_header">Search</string>
+    <string name="control_header">Device Control</string>
+
+    <!-- Device Control Preferences -->
+    <string name="area_name_title">Area name</string>
+    <string name="device_type_title">Voice commands:</string>
+
+    <!-- Search Preferences -->
+    <string name="sync_title">Show results from the Internet</string>
+    <string name="safe_search_title">Safe search</string>
+    <string name="safe_search_on">"Hide results that aren't family-friendly"</string>
+    <string name="safe_search_off">Show all results</string>
+    <string name="settings">Settings</string>
+    <string name="search">Search</string>
+    <string name="devices">Devices</string>
+    <string name="office_light">Office light</string>
+    <string name="kitchen_light">Kitchen light</string>
+    <string name="office_fan">Office fan</string>
+    <string name="search_label">You searched for:</string>
+</resources>

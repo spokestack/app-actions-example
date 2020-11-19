@@ -1,0 +1,30 @@
+description = "the user wishes to turn a device on or off"
+
+[slots.device]
+type = "entity"
+values = [
+    "office",
+    "office light",
+    "office lights",
+    "office fan",
+    "kitchen light",
+    "kitchen lights"
+]
+
+[slots.command]
+type = "entity"
+values = [
+    "on",
+    "off"
+]
+
+[utterances]
+values = [
+    "turn {command} {device}",
+    "turn {device} {command}",
+    "turn the {device} {command}",
+    "turn the {device} {command} please",
+    "turn the {device} {command} now",
+    "i want the {device} {command}",
+    "{device} {command}"
+]

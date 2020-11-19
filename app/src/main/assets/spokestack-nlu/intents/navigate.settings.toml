@@ -1,0 +1,26 @@
+description = "the user wishes to view the settings screen"
+
+[generators.verb]
+type = "list"
+values = [
+    "see",
+    "show",
+    "give me",
+    "open",
+    "change",
+    "update",
+    "take me to"
+]
+
+[utterances]
+values = [
+    "settings",
+    "settings screen",
+    "settings screen please",
+    "{verb} settings",
+    "{verb} my settings",
+    "{verb} the settings",
+    "{verb} the settings screen",
+    "i want to see my settings",
+    "i want to change my settings"
+]

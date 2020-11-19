@@ -1,0 +1,34 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="control_entries">
+        <item>Control lights only</item>
+        <item>Control all devices</item>
+    </string-array>
+
+    <string-array name="control_values">
+        <item>lights_only</item>
+        <item>all_devices</item>
+    </string-array>
+
+    <string-array name="NavigateSettingsQueries">
+        <item>settings</item>
+        <item>settings (screen)? (please)?</item>
+        <item>go to settings</item>
+        <item>go to my settings</item>
+        <item>go to the settings</item>
+        <item>change (my)? settings</item>
+        <item>change the settings</item>
+        <item>open (my)? settings</item>
+        <item>open the settings (screen)?</item>
+        <item>show (my)? settings</item>
+        <item>show me the settings (screen)?</item>
+        <item>i want to see my settings</item>
+        <item>i want to change my settings</item>
+    </string-array>
+
+    <string-array name="ControlQueries">
+        <item>turn $device $command</item>
+        <item>turn $command (the)? $device</item>
+        <item>set $device to $command</item>
+    </string-array>
+</resources>

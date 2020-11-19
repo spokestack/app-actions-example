@@ -1,0 +1,41 @@
+<?xml version ="1.0" encoding ="utf-8"?><!--  Learn More about how to use App Actions: https://developer.android.com/guide/actions/index.html -->
+<actions>
+    <action intentName="actions.intent.GET_THING">
+        <fulfillment urlTemplate="example://search{?item}">
+            <parameter-mapping
+                intentParameter="thing.name"
+                required="true"
+                urlParameter="item" />
+        </fulfillment>
+        <!-- fallback handler -->
+        <fulfillment urlTemplate="example://search" />
+    </action>
+    <action
+        intentName="navigate.settings"
+        queryPatterns="@array/NavigateSettingsQueries">
+        <fulfillment urlTemplate="example://settings" />
+    </action>
+    <action
+        intentName="command.control_device"
+        queryPatterns="@array/ControlQueries">
+        <parameter
+            name="device"
+            type="https://schema.org/Text" />
+        <parameter
+            name="command"
+            type="https://schema.org/Text" />
+
+        <fulfillment urlTemplate="example://control{?device,command}">
+            <parameter-mapping
+                intentParameter="device"
+                required="true"
+                urlParameter="device" />
+            <parameter-mapping
+                intentParameter="command"
+                required="true"
+                urlParameter="command" />
+        </fulfillment>
+
+        <fulfillment urlTemplate="example://control" />
+    </action>
+</actions>

@@ -1,0 +1,35 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/search_header">
+
+        <SwitchPreferenceCompat
+            app:key="internet"
+            app:title="@string/sync_title" />
+
+        <SwitchPreferenceCompat
+            app:dependency="internet"
+            app:key="safe_search"
+            app:summaryOff="@string/safe_search_off"
+            app:summaryOn="@string/safe_search_on"
+            app:title="@string/safe_search_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/control_header">
+
+        <EditTextPreference
+            app:key="area_name"
+            app:title="@string/area_name_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="lights_only"
+            app:entries="@array/control_entries"
+            app:entryValues="@array/control_values"
+            app:key="device_type"
+            app:title="@string/device_type_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

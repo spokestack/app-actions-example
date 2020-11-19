@@ -1,0 +1,39 @@
+description = "the user wishes to search for an item"
+
+[slots.item]
+type = "entity"
+values = [
+    "TVs",
+    "microwaves",
+    "shoes",
+    "running shoes",
+    "shirts",
+    "video game consoles",
+    "desks",
+    "chairs",
+    "kitchen tables"
+]
+
+[generators.verb]
+type = "list"
+values = [
+    "see",
+    "show",
+    "give me",
+    "show me",
+    "look for",
+    "look up",
+    "im looking for",
+    "i want",
+    "i want to see",
+    "i want to buy",
+    "search for",
+    "search"
+]
+
+[utterances]
+values = [
+    "{verb} {item}",
+    "{item}",
+    "{item} please"
+]
