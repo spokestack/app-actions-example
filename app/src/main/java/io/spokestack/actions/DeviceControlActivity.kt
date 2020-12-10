@@ -2,12 +2,11 @@ package io.spokestack.actions
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.widget.SwitchCompat
 import io.spokestack.actions.databinding.ActivityDeviceControlBinding
-import io.spokestack.spokestack.SpokestackAdapter
 import io.spokestack.spokestack.nlu.NLUResult
-import io.spokestack.spokestack.tts.SynthesisRequest
+import io.spokestack.tray.SpokestackTrayListener
+import io.spokestack.tray.VoicePrompt
 
 /**
  * An activity that mimics control of a few smart home
@@ -19,7 +18,7 @@ class DeviceControlActivity : VoiceActivity() {
     private val deviceMap: HashMap<String, SwitchCompat> = HashMap()
     private val commandMap: HashMap<String, Boolean> = HashMap()
 
-    override fun createListener(): SpokestackAdapter {
+    override fun getTrayListener(): SpokestackTrayListener {
         return Listener()
     }
 
@@ -56,13 +55,18 @@ class DeviceControlActivity : VoiceActivity() {
         commandMap["off"] = false
     }
 
-    private fun setUiFromIntent(data: Uri?) {
+    private fun setUiFromIntent(data: Uri?, fromTray: Boolean = false) {
         if (data == null) {
             return
         }
 
-        // if we know we've gotten here via voice command, respond via voice
-        respond()
+        // `fromTray` is our cue for whether the command originally came from
+        // Spokestack Tray or Google Assistant. If it's the former, the Tray
+        // will automatically display and play the response; if the latter,
+        // we'll need to explicitly respond.
+        if (!fromTray) {
+            tray.say(confirmationPrompt())
+        }
 
         val device = resolveDevice(data.getQueryParameter("device"))
         val on = resolveCommand(data.getQueryParameter("command"))
@@ -76,9 +80,8 @@ class DeviceControlActivity : VoiceActivity() {
         }
     }
 
-    private fun respond() {
-        val synthesisRequest = SynthesisRequest.Builder("Got it!").build()
-        spokestack.synthesize(synthesisRequest)
+    private fun confirmationPrompt(): VoicePrompt {
+        return VoicePrompt("Got it!")
     }
 
     private fun resolveDevice(deviceSlot: String?): SwitchCompat? {
@@ -105,17 +108,20 @@ class DeviceControlActivity : VoiceActivity() {
      * others. A real application should provide more user feedback
      * than this.
      */
-    inner class Listener : SpokestackAdapter() {
-        override fun nluResult(result: NLUResult) {
-            if (result.intent == "command.control_device") {
+    inner class Listener : SpokestackTrayListener {
+
+        override fun onClassification(result: NLUResult): VoicePrompt? {
+            return if (result.intent == "command.control_device") {
                 val dataUri = Uri.Builder()
                     .appendQueryParameter("device", result.slots["device"]?.rawValue)
                     .appendQueryParameter("command", result.slots["command"]?.rawValue)
                     .build()
-                setUiFromIntent(dataUri)
+                setUiFromIntent(dataUri, true)
+                confirmationPrompt()
             } else {
-                Log.i(logTag, "Unsupported intent: ${result.intent}")
+                fallbackPrompt()
             }
         }
+
     }
 }

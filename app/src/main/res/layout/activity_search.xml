@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:id="@+id/search_layout"
     tools:context=".SearchActivity">
 
     <TextView
@@ -27,4 +29,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <include
+        android:id="@+id/tray_fragment"
+        layout="@layout/spokestack_tray_fragment"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

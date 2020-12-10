@@ -1,15 +1,12 @@
 package io.spokestack.actions
 
-import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
-import io.spokestack.spokestack.SpokestackAdapter
-import io.spokestack.spokestack.nlu.NLUResult
+import io.spokestack.tray.SpokestackTrayListener
 
 class SettingsActivity : VoiceActivity() {
 
-    override fun createListener(): SpokestackAdapter {
+    override fun getTrayListener(): SpokestackTrayListener {
         return Listener()
     }
 
@@ -31,7 +28,7 @@ class SettingsActivity : VoiceActivity() {
         }
     }
 
-    inner class Listener : SpokestackAdapter() {
+    inner class Listener : SpokestackTrayListener {
         // left as an exercise to the reader
     }
 }

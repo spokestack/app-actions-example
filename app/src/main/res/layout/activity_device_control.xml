@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:id="@+id/control_layout"
     tools:context=".DeviceControlActivity">
 
     <androidx.appcompat.widget.SwitchCompat
@@ -38,4 +40,8 @@
         app:layout_constraintTop_toBottomOf="@+id/kitchenLightSwitch"
         app:layout_constraintVertical_bias="0.25" />
 
+    <include
+        android:id="@+id/tray_fragment"
+        layout="@layout/spokestack_tray_fragment"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

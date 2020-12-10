@@ -1,14 +1,9 @@
 package io.spokestack.actions
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import io.spokestack.spokestack.Spokestack
-import io.spokestack.spokestack.SpokestackAdapter
+import io.spokestack.spokestack.util.EventTracer
+import io.spokestack.tray.TrayActivity
+import io.spokestack.tray.TrayConfig
+import io.spokestack.tray.VoicePrompt
 
 /**
  * A parent class for activities that wish to expose a voice interface.
@@ -17,105 +12,32 @@ import io.spokestack.spokestack.SpokestackAdapter
  * centralized instance of Spokestack and requesting the microphone
  * permission from the user.
  */
-abstract class VoiceActivity : AppCompatActivity() {
-    private val audioPermission = 42
-
-    private var hasRecordPermission = false
+abstract class VoiceActivity : TrayActivity() {
 
     val logTag: String = javaClass.simpleName
 
-    lateinit var listener: SpokestackAdapter
-    lateinit var spokestack: Spokestack
+    override fun getTrayConfig(): TrayConfig {
+        return TrayConfig.Builder()
+            .credentials(
+                "f0bc990c-e9db-4a0c-a2b1-6a6395a3d97e",
+                "5BD5483F573D691A15CFA493C1782F451D4BD666E39A9E7B2EBE287E6A72C6B6"
+            )
+            .wakewordModelURL("https://d3dmqd7cy685il.cloudfront.net/model/wake/spokestack")
+            .nluURL("https://d3dmqd7cy685il.cloudfront.net/nlu/production/f0bc990c-e9db-4a0c-a2b1-6a6395a3d97e/KfqzDHd_QBRMZZgR_VjX-T_LYTxQOVKHsVJzsUhWjZI")
+            .logLevel(EventTracer.Level.PERF.value())
+            .greeting("")
+            .withListener(getTrayListener())
+            .build()
+    }
 
     /**
-     * Create a listener to receive events from the Spokestack system.
-     *
-     * This must be implemented by each subclass because the UIs of
-     * different activities will necessarily react differently to voice
-     * commands.
+     * Provide a fallback response for the many rough edges we've left in our
+     * conversation.
      */
-    abstract fun createListener(): SpokestackAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        listener = createListener()
-        spokestack = Voice.getSpokestack(this)
-
-        // we have to ask for permission to record audio at runtime -- this will ask every time
-        // one of our activities is created, and if the user denies permission, it'll ask again
-        // each time. This should be made more user-friendly for a production app.
-        hasRecordPermission = checkRecordPermission()
-    }
-
-    private fun checkRecordPermission(): Boolean {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
-        }
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.RECORD_AUDIO),
-            audioPermission
+    fun fallbackPrompt(): VoicePrompt {
+        return VoicePrompt(
+            "Sorry, I didn't understand. Please try again.",
+            expectFollowup = true
         )
-        return false
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            audioPermission -> {
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
-                ) {
-                    hasRecordPermission = true
-
-                    // As soon as we know we have permission to listen, we'll
-                    // start Spokestack. With the default configuration we've
-                    // used, this doesn't mean ASR is active right away.
-                    //
-                    // ASR is activated after the wakeword (in this case,
-                    // "Spokestack") is recognized.
-                    //
-                    // You might also wish to include a button that calls
-                    // `spokestack.activate()` when pressed to start ASR
-                    // manually. It's necessary to call `start()`
-                    // before `activate()`.
-                    spokestack.start()
-                } else {
-                    Log.w(logTag, "Record permission not granted; "
-                                  + "voice control disabled!")
-                }
-                return
-            }
-            else -> {
-                // do nothing
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        spokestack.addListener(listener)
-
-        // note that we only do the actual permission check on activity
-        // creation
-        if (hasRecordPermission) {
-            spokestack.start()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // get rid of our listener and stop the microphone in case we're
-        // about to leave this activity for good
-        spokestack.removeListener(listener)
-
-        if (hasRecordPermission) {
-            spokestack.stop()
-        }
     }
 }
