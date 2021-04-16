@@ -73,7 +73,7 @@ object Voice {
             .setProperty("nlu-metadata-path", "$cacheDir/metadata.json")
             .setProperty("nlu-model-path", "$cacheDir/nlu.tflite")
             .setProperty("wordpiece-vocab-path", "$cacheDir/vocab.txt")
-            .withLifecycle(lifecycle)
+            // .withLifecycle(lifecycle)
             .withAndroidContext(context)
             .build()
     }
