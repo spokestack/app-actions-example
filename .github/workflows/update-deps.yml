@@ -1,10 +1,10 @@
 name: update-deps
 on:
   schedule:
-    - cron:  '0 12 * * *'
+    - cron:  '45 13 * * *'
 
 jobs:
-  reviewdog:
+  spokestack:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,7 +12,7 @@ jobs:
       - uses: reviewdog/action-depup@v1
         id: update-deps
         with:
-          file: .github/dependencies
+          file: versions.properties
           version_name: spokestack_version
           repo: spokestack/spokestack-android
 
